@@ -1,8 +1,0 @@
-utill/AbstractDao.class
-utill/HibernateUtill.class
-model/UserAccount.class
-utill/DataAccessLayerException.class
-example/Main.class
-utill/HibernateFactory.class
-service/UserAccountService.class
-service/UserAccountServiceImpl.class
