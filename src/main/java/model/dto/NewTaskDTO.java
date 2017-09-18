@@ -4,6 +4,7 @@ import lombok.Data;
 import model.UserAccount;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -11,9 +12,9 @@ public class NewTaskDTO {
 
     private String name;
 
-    private LocalDate dateStartOfTask;
+    private Date dateStartOfTask;
 
-    private LocalDate dateEndOfTask;
+    private Date dateEndOfTask;
 
     private UserAccount owner;
 

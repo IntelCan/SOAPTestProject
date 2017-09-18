@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,9 +20,9 @@ public class Task {
 
     private String name;
 
-    private LocalDate dateStartOfTask;
+    private Date dateStartOfTask;
 
-    private LocalDate dateEndOfTask;
+    private Date dateEndOfTask;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserAccount owner;

@@ -7,13 +7,12 @@ import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccountDTO createUserAccount(UserAccountDTO userAccount);
+    UserAccountDTO createUserAccount(UserAccountDTO userAccountDTO);
 
     boolean deleteUser(long id);
 
-    List<UserAccount> getAllUser();
+    List<UserAccountDTO> getAllUser();
 
     UserAccountDTO getUserById(Long id);
-
 
 }
