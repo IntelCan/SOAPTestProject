@@ -1,4 +1,4 @@
-package utill;
+package exception;
 
 public class DataAccessLayerException extends RuntimeException {
     public DataAccessLayerException() {

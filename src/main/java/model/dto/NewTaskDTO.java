@@ -1,10 +1,12 @@
-package model.DTO;
+package model.dto;
 
+import lombok.Data;
 import model.UserAccount;
 
 import java.time.LocalDate;
 import java.util.Set;
 
+@Data
 public class NewTaskDTO {
 
     private String name;

@@ -1,4 +1,4 @@
-package model.converters;
+package model.dto;
 
 import lombok.Data;
 

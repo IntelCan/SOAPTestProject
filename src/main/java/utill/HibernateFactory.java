@@ -1,16 +1,12 @@
 package utill;
 
+import exception.DataAccessLayerException;
+import model.Task;
 import model.UserAccount;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import javax.security.auth.login.Configuration;
 
 public class HibernateFactory {
     private static SessionFactory sessionFactory;
@@ -30,7 +26,7 @@ public class HibernateFactory {
     /**
      * Builds a SessionFactory, if it hasn't been already.
      */
-    public static SessionFactory buildIfNeeded() throws DataAccessLayerException{
+    public static SessionFactory buildIfNeeded() throws DataAccessLayerException {
         if (sessionFactory != null) {
             return sessionFactory;
         }
@@ -88,6 +84,7 @@ public class HibernateFactory {
 
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
         configuration.addAnnotatedClass(UserAccount.class);
+        configuration.addAnnotatedClass(Task.class);
         configuration.configure();
 
         sessionFactory = configuration.buildSessionFactory();

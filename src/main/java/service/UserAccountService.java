@@ -1,14 +1,19 @@
 package service;
 
 import model.UserAccount;
+import model.dto.UserAccountDTO;
 
 import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount createUserAccount(UserAccount userAccount);
+    UserAccountDTO createUserAccount(UserAccountDTO userAccount);
 
     boolean deleteUser(long id);
 
-    public List<UserAccount> getAllUser();
+    List<UserAccount> getAllUser();
+
+    UserAccountDTO getUserById(Long id);
+
+
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import utill.Converter;
 
 @Component
-public class NewUserAccountConverter implements Converter<UserAccount,UserAccountDTO> {
+public class UserAccountConverter implements Converter<UserAccount,UserAccountDTO> {
     public UserAccountDTO convertEntityToDto(UserAccount userAccount) {
         UserAccountDTO userAccountDTO = new UserAccountDTO();
         userAccountDTO.setName(userAccount.getName());
