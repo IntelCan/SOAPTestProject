@@ -1,9 +1,8 @@
-package model.dto;
+package soap.model.dto;
 
 import lombok.Data;
-import model.UserAccount;
+import soap.model.UserAccount;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -11,10 +10,6 @@ import java.util.Set;
 public class NewTaskDTO {
 
     private String name;
-
-    private Date dateStartOfTask;
-
-    private Date dateEndOfTask;
 
     private UserAccount owner;
 

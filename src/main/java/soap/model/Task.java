@@ -1,13 +1,11 @@
-package model;
+package soap.model;
 
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -24,10 +22,11 @@ public class Task {
 
     private Date dateEndOfTask;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne( fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
     private UserAccount owner;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany( fetch = FetchType.LAZY)
     private Set<UserAccount> contributors;
 
 }

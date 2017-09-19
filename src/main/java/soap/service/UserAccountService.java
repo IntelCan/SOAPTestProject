@@ -1,10 +1,11 @@
-package service;
+package soap.service;
 
-import model.UserAccount;
-import model.dto.UserAccountDTO;
+import org.springframework.stereotype.Service;
+import soap.model.dto.UserAccountDTO;
 
 import java.util.List;
 
+@Service
 public interface UserAccountService {
 
     UserAccountDTO createUserAccount(UserAccountDTO userAccountDTO);

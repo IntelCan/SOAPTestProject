@@ -1,8 +1,8 @@
-package utill;
+package soap.utill;
 
-import exception.DataAccessLayerException;
-import model.Task;
-import model.UserAccount;
+import soap.exception.DataAccessLayerException;
+import soap.model.Task;
+import soap.model.UserAccount;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

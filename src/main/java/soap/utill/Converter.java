@@ -1,5 +1,8 @@
-package utill;
+package soap.utill;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface Converter<ENTITY, DTO> {
 
     DTO convertEntityToDto(ENTITY entity);

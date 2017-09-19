@@ -1,4 +1,4 @@
-package model.dto;
+package soap.model.dto;
 
 import lombok.Data;
 

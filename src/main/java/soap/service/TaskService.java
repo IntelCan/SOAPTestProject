@@ -1,10 +1,11 @@
-package service;
+package soap.service;
 
-import model.Task;
-import model.UserAccount;
-import model.dto.NewTaskDTO;
-import utill.AbstractDao;
+import org.springframework.stereotype.Service;
+import soap.model.Task;
+import soap.model.UserAccount;
+import soap.model.dto.NewTaskDTO;
 
+@Service
 public interface TaskService {
 
     public NewTaskDTO createTask(NewTaskDTO newTaskDTO);

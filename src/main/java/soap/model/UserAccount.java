@@ -1,4 +1,4 @@
-package model;
+package soap.model;
 
 import lombok.Data;
 

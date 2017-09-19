@@ -1,9 +1,9 @@
-package model.converters;
+package soap.model.converters;
 
-import model.Task;
-import model.dto.NewTaskDTO;
+import soap.model.Task;
+import soap.model.dto.NewTaskDTO;
 import org.springframework.stereotype.Component;
-import utill.Converter;
+import soap.utill.Converter;
 
 
 @Component
@@ -13,8 +13,6 @@ public class NewTaskConverter implements Converter<Task, NewTaskDTO> {
         NewTaskDTO newTaskDTO = new NewTaskDTO();
         newTaskDTO.setName(task.getName());
         newTaskDTO.setOwner(task.getOwner());
-        newTaskDTO.setDateStartOfTask(task.getDateStartOfTask());
-        newTaskDTO.setDateEndOfTask(task.getDateEndOfTask());
         newTaskDTO.setContributors(task.getContributors());
         return newTaskDTO;
     }
@@ -23,8 +21,6 @@ public class NewTaskConverter implements Converter<Task, NewTaskDTO> {
         Task task = new Task();
         task.setName(newTaskDTO.getName());
         task.setOwner(newTaskDTO.getOwner());
-        task.setDateStartOfTask(newTaskDTO.getDateStartOfTask());
-        task.setDateEndOfTask(newTaskDTO.getDateEndOfTask());
         task.setContributors(newTaskDTO.getContributors());
         return task;
     }

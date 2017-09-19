@@ -1,17 +1,14 @@
-package service;
+package soap.service;
 
-import model.UserAccount;
-import model.converters.UserAccountConverter;
-import model.dto.UserAccountDTO;
+import soap.model.UserAccount;
+import soap.model.dto.UserAccountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import utill.AbstractDao;
-import utill.Converter;
+import soap.utill.AbstractDao;
+import soap.utill.Converter;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @WebService
@@ -19,6 +16,9 @@ public class UserAccountServiceImpl extends AbstractDao implements UserAccountSe
 
     @Autowired
     private Converter userConverter;
+
+    public UserAccountServiceImpl() {
+    }
 
     public UserAccountServiceImpl(Converter converter) {
         super();
@@ -30,13 +30,14 @@ public class UserAccountServiceImpl extends AbstractDao implements UserAccountSe
 
         UserAccount newUser = (UserAccount)userConverter.convertDtoToEntity(userAccountDTO);
         super.saveOrUpdate(newUser);
-     return userAccountDTO;
+        return userAccountDTO;
     }
 
     @WebMethod
     public boolean deleteUser(long user_id) {
         try {
-           Object foundUserAccount = super.find(UserAccount.class, user_id);
+            UserAccount foundUserAccount =(UserAccount) super.find(UserAccount.class, user_id);
+            System.out.println("Usuwam usera: " + foundUserAccount.getName());
             super.delete(foundUserAccount);
         }
         catch (Exception e){
@@ -50,13 +51,13 @@ public class UserAccountServiceImpl extends AbstractDao implements UserAccountSe
         List<UserAccount> users = super.findAll(UserAccount.class);
         return users.stream()
                 .map( user -> (UserAccountDTO)userConverter.convertEntityToDto(user)).
-                collect(Collectors.toList());
+                        collect(Collectors.toList());
     }
 
     @WebMethod
     public UserAccountDTO getUserById(Long user_id) {
-       UserAccount foundUserAccount = (UserAccount) super.find(UserAccount.class, user_id);
+        UserAccount foundUserAccount = (UserAccount) super.find(UserAccount.class, user_id);
 
-     return (UserAccountDTO)userConverter.convertEntityToDto(foundUserAccount);
+        return (UserAccountDTO)userConverter.convertEntityToDto(foundUserAccount);
     }
 }

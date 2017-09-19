@@ -1,9 +1,9 @@
-package model.converters;
+package soap.model.converters;
 
-import model.UserAccount;
-import model.dto.UserAccountDTO;
+import soap.model.UserAccount;
+import soap.model.dto.UserAccountDTO;
 import org.springframework.stereotype.Component;
-import utill.Converter;
+import soap.utill.Converter;
 
 @Component
 public class UserAccountConverter implements Converter<UserAccount,UserAccountDTO> {
