@@ -4,6 +4,6 @@
 
     <endpoint
             name='HelloWorld'
-            implementation='example.HelloWorld'
+            implementation='soap.example.HelloWorld'
             url-pattern='/services/HelloWorld'/>
 </endpoints>

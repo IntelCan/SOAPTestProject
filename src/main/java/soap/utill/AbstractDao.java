@@ -1,5 +1,6 @@
-package utill;
+package soap.utill;
 
+import soap.exception.DataAccessLayerException;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;

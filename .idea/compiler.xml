@@ -10,8 +10,8 @@
         <module name="SOPAtest" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="SOPAtest" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="SOPAtest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package utill;
+package soap.exception;
 
 public class DataAccessLayerException extends RuntimeException {
     public DataAccessLayerException() {
