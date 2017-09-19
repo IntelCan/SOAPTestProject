@@ -2,13 +2,11 @@ package soap.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
+@SequenceGenerator(name="users_seq_name",sequenceName="users_seq", allocationSize=1, initialValue = 5)
 public class UserAccount {
 
     @Id
