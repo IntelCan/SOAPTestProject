@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import soap.service.TaskServiceImpl;
 import soap.service.UserAccountServiceImpl;
+import soap.utill.Converter;
 
 import javax.xml.ws.Endpoint;
 
@@ -14,13 +15,13 @@ import javax.xml.ws.Endpoint;
 public class SoapSetup {
 
     @Autowired
-    private NewTaskConverter newTaskConverter;
+    private Converter newTaskConverter;
 
     @Autowired
-    private UserAccountConverter userAccountConverter;
+    private Converter userAccountConverter;
 
     @Autowired
-    private TaskConverter taskConverter;
+    private Converter taskConverter;
 
     public SoapSetup() {
         this.newTaskConverter = new NewTaskConverter();
