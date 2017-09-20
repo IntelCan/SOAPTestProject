@@ -36,9 +36,7 @@ public class UserAccountServiceImpl extends AbstractDao implements UserAccountSe
     @WebMethod
     public boolean deleteUser(long user_id) {
         try {
-            UserAccount foundUserAccount =(UserAccount) super.find(UserAccount.class, user_id);
-            System.out.println("Usuwam usera: " + foundUserAccount.getName());
-            super.delete(foundUserAccount);
+            super.delete(UserAccount.class, user_id);
         }
         catch (Exception e){
             return false;

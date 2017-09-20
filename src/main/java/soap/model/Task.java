@@ -13,7 +13,7 @@ import java.util.Set;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -22,11 +22,12 @@ public class Task {
 
     private Date dateEndOfTask;
 
-    @OneToOne( fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private UserAccount owner;
 
-    @OneToMany( fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contributed_task_id")
     private Set<UserAccount> contributors;
 
 }

@@ -28,9 +28,11 @@ public abstract class AbstractDao {
         }
     }
 
-    protected void delete(Object obj) {
+    protected void delete(Class clazz, Long id) {
+        Object obj = null;
         try {
             startOperation();
+            obj = session.load(clazz, id);
             session.delete(obj);
             tx.commit();
         } catch (HibernateException e) {
