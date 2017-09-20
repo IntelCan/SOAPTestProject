@@ -26,8 +26,10 @@ public class Task {
     @JoinColumn(name = "owner_id")
     private UserAccount owner;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contributed_task_id")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "contributed_tasks",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "contributor_id")  )
     private Set<UserAccount> contributors;
 
 }

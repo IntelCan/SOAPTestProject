@@ -5,12 +5,14 @@ import soap.model.Task;
 import soap.model.UserAccount;
 import soap.model.dto.NewTaskDTO;
 
+import java.util.Set;
+
 @Service
 public interface TaskService {
 
-    public NewTaskDTO createTask(NewTaskDTO newTaskDTO);
+    NewTaskDTO createTask(NewTaskDTO newTaskDTO, long owner_id);
 
-    Task addContributorsToTask(long idTask, UserAccount... userAccounts);
+    Task addContributorsToTask(long idTask, Long... contributors_id);
 
     void endTask(long idTask);
 

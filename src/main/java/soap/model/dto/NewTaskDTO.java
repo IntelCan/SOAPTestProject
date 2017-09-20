@@ -10,8 +10,4 @@ import java.util.Set;
 public class NewTaskDTO {
 
     private String name;
-
-    private UserAccount owner;
-
-    private Set<UserAccount> contributors;
 }

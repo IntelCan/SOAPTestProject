@@ -51,7 +51,7 @@ public abstract class AbstractDao {
         } catch (HibernateException e) {
             handleException(e);
         } finally {
-//            HibernateFactory.close(session);
+            HibernateFactory.close(session);
         }
         return obj;
     }
