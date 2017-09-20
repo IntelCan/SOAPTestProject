@@ -1,5 +1,6 @@
 package soap.service;
 
+import org.springframework.stereotype.Service;
 import soap.model.Task;
 import soap.model.UserAccount;
 import soap.model.dto.NewTaskDTO;
@@ -9,10 +10,7 @@ import soap.utill.Converter;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @WebService
 public class TaskServiceImpl extends AbstractDao implements TaskService {
@@ -35,18 +33,23 @@ public class TaskServiceImpl extends AbstractDao implements TaskService {
 
     @WebMethod
     @Override
-    public NewTaskDTO createTask(NewTaskDTO newTaskDTO) {
+    public NewTaskDTO createTask(NewTaskDTO newTaskDTO, long owner_id) {
+        UserAccount owner = (UserAccount) super.find(UserAccount.class, owner_id);
         Task task = (Task) newTaskConverter.convertDtoToEntity(newTaskDTO);
         task.setDateStartOfTask(new Date());
+        task.setOwner(owner);
         this.saveOrUpdate(task);
         return newTaskDTO;
     }
 
     @WebMethod
     @Override
-    public Task addContributorsToTask(long idTask, UserAccount... userAccounts) {
+    public Task addContributorsToTask(long idTask, Long... contributors_id) {
          Task task = (Task)find(Task.class, idTask);
-         Set<UserAccount> contributors = new HashSet<UserAccount>(Arrays.asList(userAccounts));
+         Set<UserAccount> contributors = new HashSet<>(task.getContributors());
+         for(long contributor_id: contributors_id){
+             contributors.add((UserAccount)super.find(UserAccount.class, contributor_id));
+         }
          task.setContributors(contributors);
          super.saveOrUpdate(task);
          return task;
@@ -55,7 +58,11 @@ public class TaskServiceImpl extends AbstractDao implements TaskService {
     @WebMethod
     @Override
     public void endTask(long idTask) {
-
+        Task task = (Task)super.find(Task.class, idTask);
+        task.setDateEndOfTask(new Date());
+        super.saveOrUpdate(task);
     }
+
+
 
 }
