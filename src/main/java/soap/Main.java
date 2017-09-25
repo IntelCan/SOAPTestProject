@@ -1,9 +1,11 @@
 package soap;
 
 
+import com.mongodb.MongoClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import soap.config.MongoConfig;
 import soap.example.SoapSetup;
 
 @SpringBootApplication
@@ -15,6 +17,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
         SoapSetup soapSetup = new SoapSetup();
         soapSetup.activeSoapEndpoint();
+
     }
 
 }

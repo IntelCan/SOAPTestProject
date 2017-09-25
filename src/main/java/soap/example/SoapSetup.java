@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import soap.service.TaskServiceImpl;
 import soap.service.UserAccountServiceImpl;
+import soap.service.mng.UserAccountServiceMngImpl;
 
 import javax.xml.ws.Endpoint;
 
@@ -34,14 +35,17 @@ public class SoapSetup {
 
         UserAccountServiceImpl userAccountService = new UserAccountServiceImpl(userAccountConverter);
         TaskServiceImpl taskService = new TaskServiceImpl(newTaskConverter, taskConverter);
-        System.err.println("Ciabach");
+        UserAccountServiceMngImpl userAccountServiceMng = new UserAccountServiceMngImpl();
 
-        log.debug("Start aplikacji testującej SOAP");
+        log.info("Start aplikacji testowej SOAP");
 
         String addressUserAccount = "http://localhost:9001/userAccountService";
         Endpoint.publish(addressUserAccount, userAccountService);
         String addressTask = "http://localhost:9001/taskService";
         Endpoint.publish(addressTask, taskService);
+        String addressUserMng = "http://localhost:9001/userAccountServiceMng";
+        Endpoint.publish(addressUserMng, userAccountServiceMng);
+
 
     }
 
