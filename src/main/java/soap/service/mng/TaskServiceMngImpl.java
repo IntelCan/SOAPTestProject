@@ -68,7 +68,6 @@ public class TaskServiceMngImpl implements TaskServiceMng{
         }
     //        collectionTasks.findOneAndUpdate(new BasicDBObject("name", task_name), new BasicDBObject("contributors", contributorsBSON));
         collectionTasks.find(new BasicDBObject("name", task_name));
-        collectionTasks
 
         return null;
     }
