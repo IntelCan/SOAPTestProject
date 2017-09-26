@@ -4,11 +4,13 @@ import soap.model.dto.ContributorsDTO;
 import soap.model.dto.NewTaskDTO;
 import soap.model.mng.TaskMng;
 
+import java.util.List;
+
 public interface TaskServiceMng{
 
         TaskMng createTask(NewTaskDTO newTaskDTO, String name);
 
-        TaskMng addContributorsToTask(String task_name, ContributorsDTO name_contributors);
+        List<String> addContributorsToTask(String task_name, ContributorsDTO name_contributors);
 
         void endTask(String task_name);
 }

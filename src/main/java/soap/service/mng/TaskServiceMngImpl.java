@@ -2,11 +2,8 @@ package soap.service.mng;
 
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.UpdateOptions;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.BSONObject;
 import org.bson.Document;
 import soap.config.MongoConfig;
 import soap.model.dto.ContributorsDTO;
@@ -16,8 +13,6 @@ import soap.model.mng.UserAccountMng;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @WebService
@@ -33,7 +28,7 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     public TaskServiceMngImpl() {
         this.mongoConfig = new MongoConfig();
         this.collectionUsers = mongoConfig.getDatabase().getCollection("users");
-        this.collectionTasks = mongoConfig.getDatabase().getCollection("taskss");
+        this.collectionTasks = mongoConfig.getDatabase().getCollection("tasks");
     }
 
     @Override
@@ -54,55 +49,31 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     }
 
     @Override
-    public TaskMng addContributorsToTask(@WebParam(name = "taskName") String task_name,
+    public List<String> addContributorsToTask(@WebParam(name = "taskName") String task_name,
                                          @WebParam(name = "contributors") ContributorsDTO names_contributors) {
-        Set<UserAccountMng> contributors = new HashSet<>();
-        Gson gson = new Gson();
-        BasicDBObject contributorsBSON = new BasicDBObject();
-        names_contributors.getData().forEach(name ->{
-            UserAccountMng
-            log.info(name);
-            contributorsBSON.append("contributor", collectionUsers.find(new BasicDBObject("name", name)).first());
-            log.info(collectionUsers.find(new BasicDBObject("name", name)).first().toJson());
-        });
-//        for(String name : name_contributors.getData()) {
-//            contributorsBSON.append("contributor", collectionUsers.find(new BasicDBObject("name", name)).first());
-//
-//        }
-        log.info("Contr: "+ contributorsBSON.toJson());
-        UpdateOptions updateOptions = new UpdateOptions();
-        collectionTasks.updateOne(new BasicDBObject("name", task_name),
-                new BasicDBObject("$set", new BasicDBObject("contributors", contributorsBSON)),
-                updateOptions.upsert(true));
 
-        return null;
+        names_contributors.getData().forEach(name -> {
+            BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
+            BasicDBObject userSearchCriteria = new BasicDBObject("name", name);
+
+            Document docWithContributor = collectionUsers.find(userSearchCriteria).first();
+            BasicDBObject bsonContributors = new BasicDBObject("contributors", docWithContributor);
+
+            collectionTasks.updateOne(taskSearchCriteria, new BasicDBObject("$addToSet", bsonContributors));
+        });
+
+        return names_contributors.getData();
+
     }
 
     @Override
     public void endTask(String task_name) {
 
+        BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
+        BasicDBObject bsonDateEndOfTask = new BasicDBObject("dateEndOfTask", new Date().toString());
+
+        collectionTasks.updateOne(taskSearchCriteria, new BasicDBObject("$set",bsonDateEndOfTask ));
+
     }
 
-    public static Document createBSONObj(TaskMng taskMng){
-        Document document = new Document();
-        document.append("name", taskMng.getName())
-                .append("dateStartOfTask", taskMng.getDateStartOfTask().toString())
-                .append("dateEndOfTask", taskMng.getDateEndOfTask().toString())
-                .append("owner", UserAccountServiceMngImpl.createBSONObj(taskMng.getOwner()))
-                .append("contributors", contributorsMapping(taskMng.getContributors()));
-        return document;
-    }
-
-//    public static UserAccountMng createTaskFromBSON(Document document){
-//
-//        TaskMng taskMng = new TaskMng();
-//        taskMng.setName(document.get("name").toString());
-//        return userMng;
-//    }
-
-    public static BasicDBObject contributorsMapping(Set<UserAccountMng> userAccountMngs){
-        BasicDBObject contributors = new BasicDBObject();
-        userAccountMngs.stream().map( contributor -> contributors.put("contributor", UserAccountServiceMngImpl.createBSONObj(contributor)));
-        return contributors;
-    }
 }
