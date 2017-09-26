@@ -11,6 +11,7 @@ import soap.model.dto.NewTaskDTO;
 import soap.model.mng.TaskMng;
 import soap.model.mng.UserAccountMng;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.*;
@@ -32,16 +33,19 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     }
 
     @Override
-    public TaskMng createTask(NewTaskDTO newTaskDTO, String name) {
+    @WebMethod
+    public TaskMng createTask(@WebParam(name = "newTask") NewTaskDTO newTaskDTO,
+                              @WebParam(name = "ownerName") String owner_name) {
+        Gson gson = new Gson();
         BasicDBObject searchCriteria = new BasicDBObject();
-        searchCriteria.put("name", name);
-        UserAccountMng owner = UserAccountServiceMngImpl.createUserFromBSON(collectionUsers.find(searchCriteria).first());
+        searchCriteria.put("name", owner_name);
+        Document document = collectionUsers.find(searchCriteria).first();
+        UserAccountMng owner = gson.fromJson(document.toJson(), UserAccountMng.class);
         TaskMng taskMng = new TaskMng();
         taskMng.setName(newTaskDTO.getName());
         taskMng.setDateStartOfTask(new Date());
         taskMng.setOwner(owner);
 
-        Gson gson = new Gson();
         log.info(gson.toJson(taskMng));
         Document doc = Document.parse(gson.toJson(taskMng));
         collectionTasks.insertOne(doc);
@@ -49,8 +53,9 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     }
 
     @Override
+    @WebMethod
     public List<String> addContributorsToTask(@WebParam(name = "taskName") String task_name,
-                                         @WebParam(name = "contributors") ContributorsDTO names_contributors) {
+                                              @WebParam(name = "contributors") ContributorsDTO names_contributors) {
 
         names_contributors.getData().forEach(name -> {
             BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
@@ -67,7 +72,8 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     }
 
     @Override
-    public void endTask(String task_name) {
+    @WebMethod
+    public void endTask(@WebParam(name = "taskName") String task_name) {
 
         BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
         BasicDBObject bsonDateEndOfTask = new BasicDBObject("dateEndOfTask", new Date().toString());

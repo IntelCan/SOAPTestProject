@@ -1,12 +1,13 @@
 package soap.service.mng;
 
+import soap.model.dto.UserAccountDTO;
 import soap.model.mng.UserAccountMng;
 
 import java.util.List;
 
 public interface UserAccountServiceMng {
 
-    UserAccountMng createUserAccount(UserAccountMng userAccountMng);
+    UserAccountDTO createUserAccount(UserAccountDTO userAccountDTO);
 
     boolean deleteUser(String name);
 
