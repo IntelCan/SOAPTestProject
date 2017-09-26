@@ -1,20 +1,26 @@
 package soap.service.mng;
 
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.BSONObject;
 import org.bson.Document;
 import soap.config.MongoConfig;
+import soap.model.dto.ContributorsDTO;
 import soap.model.dto.NewTaskDTO;
 import soap.model.mng.TaskMng;
 import soap.model.mng.UserAccountMng;
 
+import javax.jws.WebParam;
+import javax.jws.WebService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
+@WebService
+@Slf4j
 public class TaskServiceMngImpl implements TaskServiceMng{
 
     private MongoConfig mongoConfig;
@@ -26,7 +32,7 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     public TaskServiceMngImpl() {
         this.mongoConfig = new MongoConfig();
         this.collectionUsers = mongoConfig.getDatabase().getCollection("users");
-        this.collectionTasks = mongoConfig.getDatabase().getCollection("tasks");
+        this.collectionTasks = mongoConfig.getDatabase().getCollection("taskss");
     }
 
     @Override
@@ -34,11 +40,36 @@ public class TaskServiceMngImpl implements TaskServiceMng{
         BasicDBObject searchCriteria = new BasicDBObject();
         searchCriteria.put("name", name);
         UserAccountMng owner = UserAccountServiceMngImpl.createUserFromBSON(collectionUsers.find(searchCriteria).first());
-        return null;
+        TaskMng taskMng = new TaskMng();
+        taskMng.setName(newTaskDTO.getName());
+        taskMng.setDateStartOfTask(new Date());
+        taskMng.setOwner(owner);
+
+        Gson gson = new Gson();
+        log.info(gson.toJson(taskMng));
+        Document doc = Document.parse(gson.toJson(taskMng));
+        collectionTasks.insertOne(doc);
+        return taskMng;
     }
 
     @Override
-    public TaskMng addContributorsToTask(String task_name, String... name_contributors) {
+    public TaskMng addContributorsToTask(@WebParam(name = "taskName") String task_name,
+                                         @WebParam(name = "contributors") ContributorsDTO name_contributors) {
+        Set<UserAccountMng> contributors = new HashSet<>();
+        Gson gson = new Gson();
+        BasicDBObject contributorsBSON = new BasicDBObject();
+        for(String name : name_contributors.getData()) {
+            contributorsBSON.append("contributor", collectionUsers.find(new BasicDBObject("name", name)).first());
+
+//        Arrays.stream(name_contributors).map(name_contributor ->{
+//            Document document = collectionUsers.find(new BasicDBObject("name", name_contributor)).first();
+//
+//        });
+        }
+    //        collectionTasks.findOneAndUpdate(new BasicDBObject("name", task_name), new BasicDBObject("contributors", contributorsBSON));
+        collectionTasks.find(new BasicDBObject("name", task_name));
+        collectionTasks
+
         return null;
     }
 
@@ -57,15 +88,12 @@ public class TaskServiceMngImpl implements TaskServiceMng{
         return document;
     }
 
-    public static UserAccountMng createTaskFromBSON(Document document){
-
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = df.parse("06/27/2007");
-        TaskMng taskMng = new TaskMng();
-        taskMng.setName(document.get("name").toString());
-        taskMng.setDateEndOfTask(format.parse(document.get("dateStartOfTask").toString()));
-        return userMng;
-    }
+//    public static UserAccountMng createTaskFromBSON(Document document){
+//
+//        TaskMng taskMng = new TaskMng();
+//        taskMng.setName(document.get("name").toString());
+//        return userMng;
+//    }
 
     public static BasicDBObject contributorsMapping(Set<UserAccountMng> userAccountMngs){
         BasicDBObject contributors = new BasicDBObject();
