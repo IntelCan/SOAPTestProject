@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BSONObject;
 import org.bson.Document;
@@ -66,8 +67,10 @@ public class TaskServiceMngImpl implements TaskServiceMng{
 //
 //        });
         }
-    //        collectionTasks.findOneAndUpdate(new BasicDBObject("name", task_name), new BasicDBObject("contributors", contributorsBSON));
-        collectionTasks.find(new BasicDBObject("name", task_name));
+        UpdateOptions updateOptions = new UpdateOptions();
+        collectionTasks.updateMany(new BasicDBObject("name", task_name),
+                new BasicDBObject("$set", new BasicDBObject("contributors", contributorsBSON)),
+                updateOptions.upsert(true));
 
         return null;
     }
