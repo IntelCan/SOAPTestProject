@@ -55,20 +55,23 @@ public class TaskServiceMngImpl implements TaskServiceMng{
 
     @Override
     public TaskMng addContributorsToTask(@WebParam(name = "taskName") String task_name,
-                                         @WebParam(name = "contributors") ContributorsDTO name_contributors) {
+                                         @WebParam(name = "contributors") ContributorsDTO names_contributors) {
         Set<UserAccountMng> contributors = new HashSet<>();
         Gson gson = new Gson();
         BasicDBObject contributorsBSON = new BasicDBObject();
-        for(String name : name_contributors.getData()) {
+        names_contributors.getData().forEach(name ->{
+            UserAccountMng
+            log.info(name);
             contributorsBSON.append("contributor", collectionUsers.find(new BasicDBObject("name", name)).first());
-
-//        Arrays.stream(name_contributors).map(name_contributor ->{
-//            Document document = collectionUsers.find(new BasicDBObject("name", name_contributor)).first();
+            log.info(collectionUsers.find(new BasicDBObject("name", name)).first().toJson());
+        });
+//        for(String name : name_contributors.getData()) {
+//            contributorsBSON.append("contributor", collectionUsers.find(new BasicDBObject("name", name)).first());
 //
-//        });
-        }
+//        }
+        log.info("Contr: "+ contributorsBSON.toJson());
         UpdateOptions updateOptions = new UpdateOptions();
-        collectionTasks.updateMany(new BasicDBObject("name", task_name),
+        collectionTasks.updateOne(new BasicDBObject("name", task_name),
                 new BasicDBObject("$set", new BasicDBObject("contributors", contributorsBSON)),
                 updateOptions.upsert(true));
 
