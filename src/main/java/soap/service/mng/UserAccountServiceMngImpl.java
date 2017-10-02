@@ -6,8 +6,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import soap.config.MongoConfig;
+import soap.model.UserAccount;
 import soap.model.dto.UserAccountDTO;
-import soap.model.mng.UserAccountMng;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -50,23 +50,23 @@ public class UserAccountServiceMngImpl implements UserAccountServiceMng {
 
     @Override
     @WebMethod
-    public List<UserAccountMng> getAllUser() {
+    public List<UserAccount> getAllUser() {
       MongoCursor<Document> cursor = collectionUsers.find().iterator();
-      List<UserAccountMng> users = new ArrayList<>();
+      List<UserAccount> users = new ArrayList<>();
       while (cursor.hasNext()){
           Document doc = cursor.next();
-          users.add(gson.fromJson(doc.toJson(), UserAccountMng.class));
+          users.add(gson.fromJson(doc.toJson(), UserAccount.class));
       }
       return users;
     }
 
     @Override
     @WebMethod
-    public UserAccountMng getUserByName(@WebParam(name = "userName") String user_name) {
+    public UserAccount getUserByName(@WebParam(name = "userName") String user_name) {
         BasicDBObject searchCriteria = new BasicDBObject();
         searchCriteria.put("name", user_name);
         Document doc = collectionUsers.find(searchCriteria).first();
-        UserAccountMng userAccountMng = gson.fromJson(doc.toJson(), UserAccountMng.class);
-        return userAccountMng;
+        UserAccount userAccount = gson.fromJson(doc.toJson(), UserAccount.class);
+        return userAccount;
     }
 }

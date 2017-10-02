@@ -1,7 +1,7 @@
 package soap.service.mng;
 
+import soap.model.UserAccount;
 import soap.model.dto.UserAccountDTO;
-import soap.model.mng.UserAccountMng;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ public interface UserAccountServiceMng {
 
     boolean deleteUser(String name);
 
-    List<UserAccountMng> getAllUser();
+    List<UserAccount> getAllUser();
 
-    UserAccountMng getUserByName(String name);
+    UserAccount getUserByName(String name);
 
 }

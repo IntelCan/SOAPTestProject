@@ -6,10 +6,10 @@ import com.mongodb.client.MongoCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import soap.config.MongoConfig;
+import soap.model.Task;
+import soap.model.UserAccount;
 import soap.model.dto.ContributorsDTO;
 import soap.model.dto.NewTaskDTO;
-import soap.model.mng.TaskMng;
-import soap.model.mng.UserAccountMng;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -34,22 +34,22 @@ public class TaskServiceMngImpl implements TaskServiceMng{
 
     @Override
     @WebMethod
-    public TaskMng createTask(@WebParam(name = "newTask") NewTaskDTO newTaskDTO,
-                              @WebParam(name = "ownerName") String owner_name) {
+    public Task createTask(@WebParam(name = "newTask") NewTaskDTO newTaskDTO,
+                           @WebParam(name = "ownerName") String owner_name) {
         Gson gson = new Gson();
         BasicDBObject searchCriteria = new BasicDBObject();
         searchCriteria.put("name", owner_name);
         Document document = collectionUsers.find(searchCriteria).first();
-        UserAccountMng owner = gson.fromJson(document.toJson(), UserAccountMng.class);
-        TaskMng taskMng = new TaskMng();
-        taskMng.setName(newTaskDTO.getName());
-        taskMng.setDateStartOfTask(new Date());
-        taskMng.setOwner(owner);
+        UserAccount owner = gson.fromJson(document.toJson(), UserAccount.class);
+        Task task = new Task();
+        task.setName(newTaskDTO.getName());
+        task.setDateStartOfTask(new Date());
+        task.setOwner(owner);
 
-        log.info(gson.toJson(taskMng));
-        Document doc = Document.parse(gson.toJson(taskMng));
+        log.info(gson.toJson(task));
+        Document doc = Document.parse(gson.toJson(task));
         collectionTasks.insertOne(doc);
-        return taskMng;
+        return task;
     }
 
     @Override
