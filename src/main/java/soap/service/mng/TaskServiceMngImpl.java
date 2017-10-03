@@ -1,9 +1,12 @@
 package soap.service.mng;
 
 import com.google.gson.Gson;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.BsonArray;
 import org.bson.Document;
 import soap.config.MongoConfig;
 import soap.model.Task;
@@ -56,16 +59,19 @@ public class TaskServiceMngImpl implements TaskServiceMng{
     @WebMethod
     public List<String> addContributorsToTask(@WebParam(name = "taskName") String task_name,
                                               @WebParam(name = "contributors") ContributorsDTO names_contributors) {
+        BasicDBList contributors = new BasicDBList();
 
         names_contributors.getData().forEach(name -> {
-            BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
             BasicDBObject userSearchCriteria = new BasicDBObject("name", name);
-
             Document docWithContributor = collectionUsers.find(userSearchCriteria).first();
-            BasicDBObject bsonContributors = new BasicDBObject("contributors", docWithContributor);
-
-            collectionTasks.updateOne(taskSearchCriteria, new BasicDBObject("$addToSet", bsonContributors));
+            contributors.add(docWithContributor);
         });
+
+        BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
+        BasicDBObject eachContributors = new BasicDBObject("$each", contributors);
+        BasicDBObject bsonContributors = new BasicDBObject("contributors", eachContributors);
+
+        collectionTasks.updateMany(taskSearchCriteria, new BasicDBObject("$addToSet", bsonContributors));
 
         return names_contributors.getData();
 
@@ -78,7 +84,7 @@ public class TaskServiceMngImpl implements TaskServiceMng{
         BasicDBObject taskSearchCriteria = new BasicDBObject("name", task_name);
         BasicDBObject bsonDateEndOfTask = new BasicDBObject("dateEndOfTask", new Date().toString());
 
-        collectionTasks.updateOne(taskSearchCriteria, new BasicDBObject("$set",bsonDateEndOfTask ));
+        collectionTasks.updateOne(taskSearchCriteria, new BasicDBObject("$addToSet",bsonDateEndOfTask ));
 
     }
 
